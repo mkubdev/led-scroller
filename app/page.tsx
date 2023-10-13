@@ -60,6 +60,7 @@ export default function Home() {
       }
     }
 
+
     // FIXME: When we redirect the user, the message is not yet stored in redis! Sometimes it works, sometimes it doesn't.
     // PROPOSAL: add a delay before redirecting the user or redirect when api response is received
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,) => {
@@ -86,11 +87,15 @@ export default function Home() {
 
     return (
       <form onSubmit={handleSubmit} className="flex flex-col p-8 gap-4 w-full lg:w-2/5">
-        <h2 className="text-xl lg:text-3xl font-bold text-center">Add your message <BlinkingCursor /></h2>
+        <h2 className="text-xl lg:text-3xl font-bold text-center">
+          Add your message <BlinkingCursor />
+        </h2>
         <div className="flex flex-col justify-center items-center">
           <Input type="text" name="led input" value={message} onChange={(e) => { setMessage(e.target.value); }} />
         </div>
-        <Button className="gap-2 font-bold transition-all hover:bg-gradient-to-r hover:from-blue-300 hover:via-fuschia-600 hover:to-orange-500 hover:to-green-500" type="submit">Generate <MagicWandIcon className="h-4 w-4" /></Button>
+        <Button className="gap-2 font-bold transition-all hover:bg-gradient-to-r hover:from-blue-300 hover:via-fuschia-600 hover:to-orange-500 hover:to-green-500" type="submit">
+          Generate <MagicWandIcon className="h-4 w-4" />
+        </Button>
       </form>
     )
   }
@@ -104,7 +109,8 @@ export default function Home() {
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.8,
+          repeatType: "reverse",
+          duration: 1.2,
         }}
       >
         |
@@ -126,7 +132,7 @@ export default function Home() {
             transition: {
               repeat: Infinity,
               repeatType: "reverse",
-              duration: 0.6,
+              duration: 0.8,
             },
           },
         }}
