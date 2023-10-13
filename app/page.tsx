@@ -2,12 +2,11 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { kv } from '@vercel/kv'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import Marquee from "react-fast-marquee";
 import axios from "axios"
+import { LightningBoltIcon, MagicWandIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
+import { motion } from 'framer-motion';
 
 export default function Home() {
 
@@ -61,31 +60,105 @@ export default function Home() {
       }
     }
 
+    // FIXME: When we redirect the user, the message is not yet stored in redis! Sometimes it works, sometimes it doesn't.
+    // PROPOSAL: add a delay before redirecting the user or redirect when api response is received
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,) => {
       e.preventDefault();
 
-      handlePostRequest();
+      try {
+        const response = await handlePostRequest().then(() => {
+          router.push(`/ledboard/${encodeURIComponent(message)}`)
+        });
+        console.log("Response from handleSubmit:", response)
 
-      // use KV storage?
-      router.push(`/ledboard/${encodeURIComponent(message)}`)
+        // if (response.status == 200) {
+        //   console.log("Response from handleSubmit:", response)
+        //   router.push(`/ledboard/${encodeURIComponent(message)}`)
+        // } else {
+        //   console.log("API request was not successful.");
+        // }
+
+      } catch (error) {
+        console.error("An unexpected error occurred on MessageGenerator handleSubmit():", error);
+      }
+
     }
 
     return (
-      <form onSubmit={handleSubmit} className="flex flex-col p-8 gap-4 ">
-        <h2 className="text-3xl font-bold">Add your message:</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col p-8 gap-4 w-full lg:w-2/5">
+        <h2 className="text-xl lg:text-3xl font-bold text-center">Add your message <BlinkingCursor /></h2>
         <div className="flex flex-col justify-center items-center">
           <Input type="text" name="led input" value={message} onChange={(e) => { setMessage(e.target.value); }} />
         </div>
-        <Button type="submit">Generate LED!</Button>
+        <Button className="gap-2 font-bold transition-all hover:bg-gradient-to-r hover:from-blue-300 hover:via-fuschia-600 hover:to-orange-500 hover:to-green-500" type="submit">Generate <MagicWandIcon className="h-4 w-4" /></Button>
       </form>
+    )
+  }
+
+  const BlinkingCursor = () => {
+    return (
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: [0, 1, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 0.8,
+        }}
+      >
+        |
+      </motion.span>
+    );
+  };
+
+  const Title = () => {
+    return (
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {
+            opacity: 0.5,
+          },
+          visible: {
+            opacity: 1,
+            transition: {
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 0.6,
+            },
+          },
+        }}
+      >
+        <h1 className="flex items-center justify-center gap-2 text-3xl lg:text-7xl font-bold text-white">
+          Led Scroller
+          <motion.span
+            style={{
+              display: "inline-block",
+              transformOrigin: "50% 50%",
+            }}
+            animate={{
+              scaleX: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 1.9, // Alter title <> logo flashing tiiime
+            }}
+          >
+            {/* Repeat this for each letter in "Led Scroller" */}
+            <LightningBoltIcon className="h-8 w-8 lg:h-16 lg:w-16" />
+          </motion.span>
+        </h1>
+      </motion.div>
     )
   }
 
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-7xl font-bold">Led Scroller 🧪</h1>
+    <main className="flex min-h-screen flex-col items-center justify-evenly p-0 lg:p-12">
+      <Title />
       <MessageGenerator />
     </main>
+
   )
 }
