@@ -1,39 +1,74 @@
 "use client"
 
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { kv } from '@vercel/kv'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import Marquee from "react-fast-marquee";
+
 
 export default function Home() {
+	const [preview, setPreview] = useState<string>("");
 
-	const generateMessage = (message: string) => {
-
-		// Generate an ID in backend /w expiration date
-
-		// Return the ID
-
-		// Use the ID to fetch the message in the frontend
-
-		// Redirect to /ledboard/[id]
+	/**
+	 * =====================
+	 *   LedDisplayPreview
+	 * =====================
+	 */
+	type LedDisplayPreviewProps = {
+		previewMessage: string;
 	}
 
-	const MessageGenerator = () => {
-		const router = useRouter()
-
-		const handleRedirect = () => {
-			// Redirect the user to the '/another-page' when the button is clicked.
-			router.push('/ledboard/1');
-		};
-
+	const LedDisplayPreview = ({ previewMessage }: LedDisplayPreviewProps) => {
 		return (
-			<div className="flex flex-col py-12 border border-1">
-				<div className="flex flex-col justify-center items-center">
-					<label className="font-medium text-3xl">Add your message</label>
-					<input type="text" name="name" />
-				</div>
-				<button onClick={handleRedirect}>Generate LED!</button>
+			<div className="border-2 rounded-md h-96">
+				<Marquee
+					autoFill={true}
+					pauseOnClick={true}
+					className="font-medium text-7xl overflow-hidden h-96 hover:mouse-cursor"
+				>
+					{previewMessage}
+				</Marquee>
 			</div>
+		);
+	};
+
+	/**
+	 * =====================
+	 *   MessageGenerator
+	 * =====================
+	 */
+	type MessageGeneratorProps = {
+		setPreview: any;
+	}
+
+	const MessageGenerator = ({ setPreview }: MessageGeneratorProps) => {
+		const router = useRouter()
+		const [message, setMessage] = useState<string>("")
+
+
+		const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+
+			// use KV storage?
+			router.push(`/ledboard/blublublublu`)
+		}
+
+		//! Using setPreview() here doesn't work, we loose focus on the input field. I need to find another way to conditionally render the preview component...
+		return (
+			<form onSubmit={handleSubmit} className="flex flex-col p-8 gap-4">
+				<h2 className="text-3xl font-bold">Add your message:</h2>
+				<div className="flex flex-col justify-center items-center">
+					<Input type="text" name="led input" onChange={(e) => { setMessage(e.target.value); /*setPreview(e.target.value)*/ }} />
+				</div>
+				<Button type="submit">Generate LED!</Button>
+			</form>
 		)
 	}
+
+
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -58,8 +93,8 @@ export default function Home() {
 			<div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
 				<h1 className="text-7xl font-bold">Led Scroller 🧪</h1>
 			</div>
-
-			<MessageGenerator />
+			{/* {preview && <>Check=={preview}</>} */}
+			<MessageGenerator setPreview={setPreview} />
 		</main>
 	)
 }
