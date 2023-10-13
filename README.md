@@ -29,7 +29,7 @@
 
 > Skip all the steps below by using Gitpod, which automates the setup process
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/WebXDAO/WebXGuild)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mkubdev/led-scroller)
 
 ## Technologies
 
