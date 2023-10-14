@@ -131,7 +131,8 @@ export default function Home() {
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.8,
+          repeatType: "reverse",
+          duration: 1.2,
         }}
       >
         |
@@ -153,7 +154,7 @@ export default function Home() {
             transition: {
               repeat: Infinity,
               repeatType: "reverse",
-              duration: 0.6,
+              duration: 0.8,
             },
           },
         }}
