@@ -19,7 +19,7 @@
   <p>
     <sub>
       Built with 🔥 by
-      @mk/@dk
+      <a href="https://github.com/mkubedev">@mk</a> & <a href="https://github.com/darkterminal">@dk</a>
     </sub>
   </p>
 </div>
