@@ -24,7 +24,6 @@
   </p>
 </div>
 
-
 ## Installation
 
 > Skip all the steps below by using Gitpod, which automates the setup process
