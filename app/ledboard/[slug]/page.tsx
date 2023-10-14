@@ -48,7 +48,7 @@ export default function LedBoard({ params }: { params: { slug: string } }) {
       <div className="z-10">
         <button
           className="absolute top-0 left-0 m-4 p-2 flex gap-1 items-center "
-          onClick={() => router.back()}
+onClick={() => router.push("/")}
         >
           <DoubleArrowLeftIcon className="w-4 h-4" />
           Go back
