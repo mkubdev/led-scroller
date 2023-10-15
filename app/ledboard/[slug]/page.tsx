@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Marquee from "react-fast-marquee";
 import useSWR from "swr";
 import { motion } from "framer-motion";
+import { flashingFadeInOutVariants } from "@/lib/const";
+
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -28,19 +30,7 @@ export default function LedBoard({ params }: { params: { slug: string } }) {
         initial="hidden"
         animate="visible"
         className="overflow-hidden h-screen hover:mouse-cursor"
-        variants={{
-          hidden: {
-            opacity: 0.5,
-          },
-          visible: {
-            opacity: 1,
-            transition: {
-              repeat: Infinity,
-              repeatType: "reverse",
-              duration: 0.8,
-            },
-          },
-        }}
+        variants={flashingFadeInOutVariants}
       >
         <Marquee
           autoFill={true}

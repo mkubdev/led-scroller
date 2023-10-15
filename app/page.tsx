@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { flashingFadeInOutVariants } from "@/lib/const";
 import {
   LightningBoltIcon,
   MagicWandIcon
@@ -152,19 +153,7 @@ export default function Home() {
       <motion.div
         initial="hidden"
         animate="visible"
-        variants={{
-          hidden: {
-            opacity: 0.5,
-          },
-          visible: {
-            opacity: 1,
-            transition: {
-              repeat: Infinity,
-              repeatType: "reverse",
-              duration: 0.8,
-            },
-          },
-        }}
+        variants={flashingFadeInOutVariants}
       >
         <h1 className="flex items-center justify-center gap-2 text-3xl lg:text-7xl font-bold text-white">
           Led Scroller
