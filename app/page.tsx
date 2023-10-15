@@ -41,9 +41,9 @@ export default function Home() {
    * =====================
    */
   const MessageGenerator = () => {
-    const router = useRouter();
     const [message, setMessage] = useState<string>("");
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const router = useRouter();
 
     const handlePostRequest = async () => {
       try {
@@ -74,12 +74,19 @@ export default function Home() {
       setLoading(true);
       try {
         const response = await handlePostRequest();
-        if (response === "OK") {
-          router.push(`/ledboard/${encodeURIComponent(message)}`);
-        } else {
-          // PROPOSAL: Add toaster here to notify user
-        }
         console.log("Response from handleSubmit:", response);
+
+        // FIXME: in production the response is blank
+        // if (response === "OK") {
+        //   console.log("Redirecting");
+        //   router.push(`/ledboard/${encodeURIComponent(message)}`);
+        // } else {
+        //   console.log("No redirecting");
+        //   // PROPOSAL: Add toaster here to notify user
+        // }
+
+        router.push(`/ledboard/${encodeURIComponent(message)}`)
+
       } catch (error) {
         console.error(
           "An unexpected error occurred on MessageGenerator handleSubmit():",
