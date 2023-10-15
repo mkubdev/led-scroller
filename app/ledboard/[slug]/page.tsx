@@ -4,6 +4,7 @@ import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import Marquee from "react-fast-marquee";
 import useSWR from "swr";
+import { motion } from "framer-motion";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -23,12 +24,32 @@ export default function LedBoard({ params }: { params: { slug: string } }) {
 
   const LedMessage = ({ message }: { message: string }) => {
     return (
-      <Marquee
-        autoFill={true}
-        className="font-medium overflow-hidden h-screen hover:mouse-cursor text-[18rem]"
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        className="overflow-hidden h-screen hover:mouse-cursor"
+        variants={{
+          hidden: {
+            opacity: 0.5,
+          },
+          visible: {
+            opacity: 1,
+            transition: {
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 0.8,
+            },
+          },
+        }}
       >
-        <p>~ {message} ~</p>
-      </Marquee>
+        <Marquee
+          autoFill={true}
+          className="font-medium overflow-hidden h-screen text-[15rem] lg:text-[18rem]"
+        >
+          <p>~ {message} ~</p>
+        </Marquee>
+      </motion.div>
+
     );
   };
 
@@ -36,7 +57,7 @@ export default function LedBoard({ params }: { params: { slug: string } }) {
     return (
       <Marquee
         autoFill={true}
-        className="font-medium text-[18rem] overflow-hidden h-screen hover:mouse-cursor"
+        className="font-medium text-[18rem] overflow-hidden h-scren hover:mouse-cursor"
       >
         Oops, no data from redis
       </Marquee>
@@ -45,16 +66,16 @@ export default function LedBoard({ params }: { params: { slug: string } }) {
 
   const HeadLedBoard = () => {
     return (
-      <div className="z-10">
+      <div className="z-10 text-muted-foreground">
         <button
           className="absolute top-0 left-0 m-4 p-2 flex gap-1 items-center "
-onClick={() => router.push("/")}
+          onClick={() => router.push("/")}
         >
           <DoubleArrowLeftIcon className="w-4 h-4" />
           Go back
         </button>
 
-        <span className="absolute top-0 right-0 m-4 p-2 text-muted-foreground">
+        <span className="absolute top-0 right-0 m-4 p-2">
           Something built by{" "}
           <a className="underline" href="https://github.com/mkubdev">
             @mk
